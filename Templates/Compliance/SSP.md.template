@@ -1,0 +1,25 @@
+---
+type: system-security-plan
+system_name: <system>
+environment: <Commercial|GCC High>
+cui_in_scope: <yes|no>
+owner: <name/role>
+last_reviewed: 2026-MM-DD
+---
+# System Security Plan — <system>
+
+## 1. System boundary & data flows
+Describe the authorization boundary, components, and where data (especially any CUI) flows. Link the
+data-flow diagram and `DATA-CLASSIFICATION.md`.
+
+## 2. Environment & tenancy
+Commercial vs GCC High; endpoints, licensing, service availability. Enforce: no CUI on Commercial.
+
+## 3. Roles & responsibilities
+System owner, ISSO, admins, break-glass accounts.
+
+## 4. Control implementation
+See `control-mapping.md` for the per-practice implementation and evidence.
+
+## 5. POA&M
+Open gaps tracked in `POAM.md`.

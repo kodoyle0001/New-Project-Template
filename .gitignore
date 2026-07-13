@@ -1,0 +1,48 @@
+# === Secrets & credentials (NEVER commit — see SECURITY.md) ===
+.env
+.env.*
+!.env.example
+config/settings.json
+config/*.local.json
+*.local.json
+.m365rc.json
+.cli-m365-tokens.json
+app-registration.json
+*.pfx
+*.cer
+*.pem
+*.key
+secrets/
+credentials*.json
+
+# === Controlled / CUI data (NEVER commit — see DATA-CLASSIFICATION.md) ===
+/cui/
+/controlled/
+*.cui
+
+# === Local Claude Code settings & worktrees ===
+.claude/settings.local.json
+.claude/worktrees/
+.claude/**/.pnp/
+
+# === Build output & dependencies ===
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+
+# === Terraform state (if IaC present) ===
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform/
+*.auto.tfvars
+secrets.tfvars
+terraform.tfvars
+
+# === Decision workbook lock / temp ===
+~$*.xlsx
+
+# === OS / editor cruft ===
+.DS_Store
+Thumbs.db

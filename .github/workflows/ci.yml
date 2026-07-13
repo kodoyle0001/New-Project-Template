@@ -1,0 +1,50 @@
+name: ci
+# Baseline gates every Swif7Edge repo ships. See SECURITY.md.
+# NOTE: pin actions to a commit SHA before production use (supply-chain integrity).
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 } # full history for gitleaks
+      - name: gitleaks (redacted, whole history)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITLEAKS_CONFIG: .gitleaks.toml
+
+  tier0-hard-deny:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tier-0 hard-deny grep gates
+        shell: bash
+        run: |
+          set -e
+          fail=0
+          scan() { if grep -RInE "$1" --include='*.ps1' --include='*.ts' --include='*.py' \
+                     --exclude-dir=_analysis --exclude-dir=node_modules . ; then
+                     echo "HARD-DENY: $2"; fail=1; fi; }
+          scan 'Invoke-Expression|\biex\b'                 "Invoke-Expression is banned"
+          scan 'ConvertTo-SecureString .*-AsPlainText'     "plaintext SecureString is banned"
+          scan '-----BEGIN [A-Z ]*PRIVATE KEY-----'        "committed private key"
+          scan '(AccountKey=|client_secret\s*[:=])'        "hardcoded secret/connection string"
+          # real tenant/subscription GUIDs must not be hardcoded in the shared template
+          scan '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}' \
+               "hardcoded GUID (use <TENANT_ID>/<CLIENT_ID> placeholders)"
+          exit $fail
+
+  integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.x" }
+      - name: init-system reference resolver
+        run: python scripts/check_references.py

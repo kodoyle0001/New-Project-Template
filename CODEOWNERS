@@ -1,0 +1,10 @@
+# Security-relevant files require security review before merge (least privilege / SoD).
+# Replace <security-team> with your GitHub team handle.
+SECURITY.md                 @<security-team>
+DATA-CLASSIFICATION.md      @<security-team>
+VAULT.md                    @<security-team>
+SHAREPOINT.md               @<security-team>
+.gitleaks.toml              @<security-team>
+.pre-commit-config.yaml     @<security-team>
+.github/workflows/**        @<security-team>
+CODEOWNERS                  @<security-team>

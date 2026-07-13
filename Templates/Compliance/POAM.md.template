@@ -1,0 +1,5 @@
+# Plan of Action & Milestones (POA&M)
+
+| GAP-ID | Practice | Priority | Description | Remediation | Owner | Due | Status |
+|---|---|---|---|---|---|---|---|
+| GAP-001 | 3.1.3 | Critical | CUI keep-out DLP in simulation-only | Enforce block/quarantine | <owner> | 2026-MM-DD | open |

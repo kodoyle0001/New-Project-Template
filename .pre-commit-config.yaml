@@ -1,0 +1,25 @@
+# Local secret-hygiene gate — run on every commit. See SECURITY.md.
+# Install once:  pip install pre-commit && pre-commit install
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+        args: ["--config", ".gitleaks.toml"]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        exclude: '\.md$'
+
+  - repo: local
+    hooks:
+      - id: check-references
+        name: init-system reference resolver
+        entry: python scripts/check_references.py
+        language: system
+        pass_filenames: false
+        files: '^(create\.md|prompts/initialization/.*\.md|BUILD_PATTERN\.md)$'

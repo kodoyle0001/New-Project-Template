@@ -1,0 +1,36 @@
+title = "Swif7Edge secret-scan ruleset"
+# Blocks real secrets; ALLOWLISTS identifiers (tenant/client/subscription IDs, thumbprints) which
+# are not secrets. See SECURITY.md.
+
+[extend]
+useDefault = true   # inherit gitleaks' built-in rules (AWS/Azure/GCP keys, PEM, tokens, ...)
+
+[[rules]]
+id = "azure-client-secret"
+description = "Azure/Entra client secret value"
+regex = '''(?i)(client[_-]?secret|application[_-]?password)['"\s:=]{1,4}[A-Za-z0-9._~-]{20,}'''
+tags = ["secret", "azure"]
+
+[[rules]]
+id = "pkcs12-or-private-key"
+description = "Certificate private key material"
+regex = '''-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----'''
+tags = ["key"]
+
+[[rules]]
+id = "sql-connection-string"
+description = "Connection string with embedded credential"
+regex = '''(?i)(Server=tcp:[^;]+;.*Password=|DefaultEndpointsProtocol=.*AccountKey=|postgres(?:ql)?://[^:\s]+:[^@\s]+@)'''
+tags = ["secret", "connection-string"]
+
+[allowlist]
+description = "Identifiers are not secrets (see SECURITY.md); template placeholders."
+regexes = [
+  '''<[A-Z_]+>''',                                             # <TENANT_ID>, <CLIENT_ID>, ...
+  '''00000000-0000-0000-0000-000000000000''',                 # placeholder GUID
+  '''CHANGE_ME''',
+]
+paths = [
+  '''_analysis/.*''',           # audit workbook may quote redacted findings
+  '''\.env\.example$''',
+]

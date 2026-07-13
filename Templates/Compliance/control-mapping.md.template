@@ -1,0 +1,12 @@
+# NIST 800-171 r2 / CMMC L2 — Control-to-Code Traceability
+
+One row per practice. Status: implemented | partial | planned | not_applicable.
+Pattern mirrors `Office-Infrastructure/docs/compliance/cmmc-level-2/mapping.md`.
+
+| Practice | Description | Implementation | Config/Code file | Status |
+|---|---|---|---|---|
+| 3.1.1 | Limit system access to authorized users | Entra ID + group gate | .claude/rules/security.md | partial |
+| 3.1.3 | Control CUI flow | DLP keep-out + Purview labels | DATA-CLASSIFICATION.md | planned |
+| 3.1.5 | Least privilege | Sites.Selected / scoped managed identity | SHAREPOINT.md, VAULT.md | partial |
+| 3.13.11 | Cryptographic protection | cert-only app-only auth, TLS | VAULT.md | implemented |
+| ... | (seed all 110 practices from the shipped CMMC L2 / 800-171 r2 PDFs) | | | |

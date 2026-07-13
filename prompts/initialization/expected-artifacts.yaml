@@ -1,0 +1,47 @@
+# expected-artifacts.yaml — the ONE canonical registry of the delivered repo's permanent outputs.
+# Producers WRITE to their target; final-validation and cleanup READ this list. This resolves the
+# prior three-way drift between create.md, the manifest, and 99-cleanup: there is now a single
+# source of truth for "what must exist in the finished repo".
+#
+# Consumed by:  prompts/initialization/90-final-validation.md  (assert each exists + non-empty)
+#               prompts/initialization/99-cleanup.md            (never delete these; require before self-delete)
+#               scripts/check_references.py                     (treats these as runtime-OK)
+
+version: "1.1"
+
+permanent_outputs:
+  # --- project definition ---
+  - path: PROJECT.md                     ; owner: scope_and_success_criteria ; required: true
+  - path: AUTHORITATIVE_ARCHITECTURE.md  ; owner: authoritative_architecture ; required: true
+  - path: DECISIONS.xlsx                 ; owner: decision_management        ; required: true
+  - path: DECISIONS.md                   ; owner: decision_management        ; required: true
+  - path: BACKLOG.md                     ; owner: work_memory                ; required: true
+  - path: STATUS.md                      ; owner: work_memory                ; required: true
+  - path: README.md                      ; owner: basic_repo_hygiene         ; required: true
+  - path: CLAUDE.md                      ; owner: work_memory                ; required: true
+  # --- durable environment interfaces (NEW — the self-consuming-scaffolder fix) ---
+  - path: VAULT.md                       ; owner: technical_guardrails       ; required: when_microsoft_integration
+  - path: SHAREPOINT.md                  ; owner: technical_guardrails       ; required: when_sharepoint
+  - path: SECURITY.md                    ; owner: technical_guardrails       ; required: true
+  - path: DATA-CLASSIFICATION.md         ; owner: data_governance           ; required: true   # forced gate
+  - path: CONVENTIONS.md                 ; owner: scoped_rules               ; required: true
+  - path: VERIFY.md                      ; owner: technical_guardrails       ; required: when_microsoft_integration
+  - path: BUILD_PATTERN.md               ; owner: multi_agent_orchestration  ; required: true
+  # --- hygiene / config ---
+  - path: .gitignore                     ; owner: basic_repo_hygiene         ; required: true
+  - path: .gitattributes                 ; owner: basic_repo_hygiene         ; required: true
+  - path: .editorconfig                  ; owner: basic_repo_hygiene         ; required: true
+  - path: .gitleaks.toml                 ; owner: technical_guardrails       ; required: true
+  - path: .pre-commit-config.yaml        ; owner: technical_guardrails       ; required: true
+  - path: .github/workflows/ci.yml       ; owner: technical_guardrails       ; required: when_github
+  - path: CODEOWNERS                     ; owner: technical_guardrails       ; required: when_github
+  - path: .claude/settings.json          ; owner: technical_guardrails       ; required: true
+  - path: .claude/rules/                 ; owner: scoped_rules               ; required: true
+  - path: scripts/check_references.py    ; owner: basic_repo_hygiene         ; required: true
+  - path: scripts/verify.ps1             ; owner: technical_guardrails       ; required: when_microsoft_integration
+  # --- provenance & record ---
+  - path: .template-provenance.json                     ; owner: cleanup ; required: true
+  - path: docs/70-audit/initialization-record.md        ; owner: cleanup ; required: true
+
+# Cross-check: every 'required: true' path MUST exist and be non-empty before cleanup self-deletes.
+# 'when_*' paths are required only when the corresponding capability/condition applies.

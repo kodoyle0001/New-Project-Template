@@ -1,0 +1,11 @@
+{
+  "$comment": "Stamped into every repo created from this template so its origin is auditable and standard improvements can be propagated. The cleanup module fills the runtime fields at initialization.",
+  "template_repo": "https://github.com/kodoyle0001/New-Project-Template",
+  "template_version": "1.1.0",
+  "manifest_version": "1.1",
+  "template_commit": "<FILLED-BY-CLEANUP: git rev-parse of the template at init time>",
+  "initialized_utc": "<FILLED-BY-CLEANUP: ISO-8601>",
+  "initialized_mode": "<new|resume|repair>",
+  "microsoft_environment": "<Commercial|GCC High|n/a>",
+  "upgrade_runbook": "docs/UPGRADING.md"
+}
